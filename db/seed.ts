@@ -31,6 +31,65 @@ async function main() {
       email: "c@c.com",
       name: "Carla",
       password: encryptedPassword,
+      tasks: {
+        create: [
+          {
+            identifier: "ojojogijsiofoa-daodjaodjo-adoadoanonvio",
+            name: "Today",
+            tasks: {
+              create: [
+                {
+                  body: "Implement basic funcionality",
+                },
+                {
+                  body: "Add task",
+                },
+                {
+                  body: "Delete task",
+                },
+                {
+                  body: "Update task",
+                },
+                {
+                  body: "Change task list",
+                },
+                {
+                  body: "Add tasklist",
+                },
+                {
+                  body: "Delete tasklist",
+                },
+                {
+                  body: "Update tasklist",
+                },
+                {
+                  body: "Add Radix and Stitches",
+                },
+              ],
+            },
+          },
+          {
+            identifier: "zznknzkncii-aooiugihof-klajiuvhguh",
+            name: "Backlog",
+            tasks: {
+              create: [
+                {
+                  body: "Improve Auth",
+                },
+                {
+                  body: "Add animations",
+                },
+                {
+                  body: "Add new task list",
+                },
+                {
+                  body: "Add sharing tasks lists",
+                },
+              ],
+            },
+          },
+        ],
+      },
     },
   });
 }
