@@ -71,7 +71,7 @@ model TaskList {
   id         String   @id @default(cuid())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  identifier String
+  identifier String   @default(cuid())
   name       String
   tasks      Task[]
   users      User[]

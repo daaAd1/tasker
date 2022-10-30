@@ -15,7 +15,6 @@ if (!process.env.NEXTAUTH_URL) {
 }
 
 module.exports = {
-  target: "experimental-serverless-trace",
   future: {
     webpack5: true,
   },
