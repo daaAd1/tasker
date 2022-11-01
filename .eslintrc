@@ -1,0 +1,5 @@
+{
+  "plugins": [
+      "@aacn_org/tailwind-classname-order"
+  ]
+}

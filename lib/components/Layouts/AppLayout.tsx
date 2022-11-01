@@ -2,8 +2,6 @@ import classNames from "classnames";
 import { useSession, signOut, signIn } from "next-auth/react";
 import Link from "next/link";
 import { Menu, Transition } from "@headlessui/react";
-import { UserIcon } from "@heroicons/react/outline";
-import { ChevronDownIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";
 import { useRouter } from "next/router";
 
@@ -44,10 +42,20 @@ const AppLayout = (props) => {
 
   return (
     <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossOrigin="true"
+      />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600&family=Montserrat:wght@300;400;600&display=swap"
+        rel="stylesheet"
+      />
       <div className="min-h-screen">
         <div className="flex flex-col flex-1">
           <div className="border-b">
-            <div className="relative flex-shrink-0 flex h-16 bg-white">
+            <div className="relative shrink-0 flex h-16 bg-white">
               <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
                 <button
                   type="button"
@@ -70,17 +78,11 @@ const AppLayout = (props) => {
                             src={session.user.image}
                             alt="PlanetScale Logo"
                           />
-                        ) : (
-                          <UserIcon className="h-6 w-6 rounded-full" />
-                        )}
+                        ) : null}
 
                         <span className="hidden  text-gray-700 text-sm font-medium lg:block">
                           <span className="sr-only">Open user menu for </span>
                         </span>
-                        <ChevronDownIcon
-                          className="flex-shrink-0 h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
                       </Menu.Button>
                     </div>
                     <Transition
@@ -128,24 +130,24 @@ const AppLayout = (props) => {
                 </div>
               </div>
             </div>
-            <div className="relative flex-shrink-0 flex h-16 bg-white">
+            <div className="relative shrink-0 flex h-16 bg-white">
               <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
                 <div className="flex flex-1 ">
                   {NAV_ITEMS.map((item) => (
-                    <Link key={item.title} href={item.href}>
-                      <a
-                        className={classNames(
-                          item.href === currentPath
-                            ? "border-b border-indigo-600 text-black"
-                            : " hover:border-b  hover:border-gray-200 text-gray-600 ",
-                          "group flex items-center px-2 py-2 text-sm leading-6 font-medium"
-                        )}
-                        aria-current={
-                          item.href === currentPath ? "page" : undefined
-                        }
-                      >
-                        {item.title}
-                      </a>
+                    <Link
+                      key={item.title}
+                      href={item.href}
+                      className={classNames(
+                        item.href === currentPath
+                          ? "border-b border-indigo-600 text-black"
+                          : " hover:border-b  hover:border-gray-200 text-gray-600 ",
+                        "group flex items-center px-2 py-2 text-sm leading-6 font-medium"
+                      )}
+                      aria-current={
+                        item.href === currentPath ? "page" : undefined
+                      }
+                    >
+                      {item.title}
                     </Link>
                   ))}
                 </div>
@@ -172,7 +174,7 @@ const AppLayout = (props) => {
             </div>
 
             <div className="mt-2">
-              <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 {props.children}
               </div>
             </div>

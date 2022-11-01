@@ -1,7 +1,6 @@
 import { useQuery } from "react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { ChevronRightIcon } from "@heroicons/react/solid";
 import { GetServerSidePropsContext } from "next";
 import classNames from "classnames";
 import AdminLayout from "@lib/components/Layouts/AdminLayout";
@@ -9,7 +8,7 @@ import { getSession } from "@lib/auth/session";
 import superagent from "superagent";
 
 const statusStyles = {
-  true: "bg-green-100 text-green-800",
+  true: "bg-emerald-100 text-emerald-800",
   false: "bg-gray-100 text-gray-800",
 };
 
@@ -84,10 +83,6 @@ function Page() {
                             </span>
                           </span>
                         </span>
-                        <ChevronRightIcon
-                          className="flex-shrink-0 h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
                       </span>
                     </a>
                   </li>

@@ -16,7 +16,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const tasks = await prisma.taskList.findMany({
       include: {
-        tasks: true,
+        tasks: {
+          orderBy: [
+            {
+              createdAt: "desc",
+            },
+          ],
+        },
       },
       where: {
         users: { some: { id: session.user.id } },

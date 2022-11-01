@@ -62,9 +62,6 @@ async function main() {
                 {
                   body: "Update tasklist",
                 },
-                {
-                  body: "Add Radix and Stitches",
-                },
               ],
             },
           },

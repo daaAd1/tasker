@@ -3,36 +3,14 @@ import Image from "next/image";
 import prisma from "../db";
 import { getSession } from "../lib/auth/session";
 import superagent from "superagent";
-import { styled } from "@stitches/react";
 import { useQuery } from "react-query";
 import { useSession } from "next-auth/react";
-
-const Button = styled("button", {
-  backgroundColor: "gainsboro",
-  borderRadius: "9999px",
-  fontSize: "13px",
-  padding: "10px 15px",
-  "&:hover": {
-    backgroundColor: "lightgray",
-  },
-});
-
-const Input = styled("input", {
-  borderRadius: "12px",
-  border: "1px solid gainsboro",
-  padding: "16px",
-  marginRight: "16px",
-});
-
-const Form = styled("form", {
-  marginTop: "16px",
-});
-
-const TaskRow = styled("div", {
-  display: "flex",
-  flexFlow: "row",
-  alignItems: "center",
-});
+import Task from "../lib/components/Task/Task";
+import TaskList from "../lib/components/TaskList/TaskList";
+import NewTask from "../lib/components/NewTask/NewTask";
+import NewTaskList from "../lib/components/NewTaskList/NewTaskList";
+import Loader from "../lib/components/Loader";
+import { useState } from "react";
 
 const Page = ({ todoLists }) => {
   const { data: session } = useSession({
@@ -40,6 +18,7 @@ const Page = ({ todoLists }) => {
   });
   console.log({ session });
 
+  const [isLoading, setIsLoading] = useState(false);
   const { data, refetch } = useQuery(["taskLists"], async () => {
     const data = await superagent.get("/api/tasklist/load");
     return data.body;
@@ -49,7 +28,7 @@ const Page = ({ todoLists }) => {
 
   const createTaskHandler = async (e, listId) => {
     e.preventDefault();
-    const inputValue = e.target.elements["new-todo"].value;
+    const inputValue = e.target.elements["new-task"].value;
 
     await superagent.post("/api/task/create").send({
       body: inputValue,
@@ -61,6 +40,7 @@ const Page = ({ todoLists }) => {
 
   const createTaskListHandler = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const inputValue = e.target.elements["new-tasklist"].value;
 
     await superagent.post("/api/tasklist/create").send({
@@ -68,6 +48,7 @@ const Page = ({ todoLists }) => {
     });
 
     refetch();
+    setIsLoading(false);
   };
 
   const deleteHandler = async (id) => {
@@ -86,7 +67,7 @@ const Page = ({ todoLists }) => {
     refetch();
   };
 
-  const updateListHandler = async (e, id) => {
+  const updateListHandler = async (id, e) => {
     const newVal = e.target.value;
     await superagent.put("/api/tasklist/update").send({
       name: newVal,
@@ -109,7 +90,7 @@ const Page = ({ todoLists }) => {
       id,
     });
 
-    refetch();
+    // refetch();
   };
 
   const updateTaskListHandler = async (id) => {
@@ -124,56 +105,43 @@ const Page = ({ todoLists }) => {
   return (
     <>
       <AppLayout>
-        {/* <blockquote> */}
-        <h1>Tasker</h1>
-
+        <h1 className="text-4xl mb-10 mx-auto max-w-xs text-center">Tasker</h1>
         {data &&
           data.map((list) => (
-            <div key={list.id}>
-              <TaskRow>
-                <Input
-                  onChange={(e) => updateListHandler(e, list.id)}
-                  type="text"
-                  defaultValue={list.name}
-                />
-                <button onClick={() => deleteListHandler(list.id)}>
-                  [DELETE]
-                </button>
-              </TaskRow>
-              <div>
+            <div className="mb-6" key={list.id}>
+              <TaskList
+                defaultValue={list.name}
+                handleChange={(e) => updateListHandler(list.id, e)}
+                handleDelete={() => deleteListHandler(list.id)}
+              />
+              <div className="flex flex-col gap-4">
+                <NewTask handleAdd={(e) => createTaskHandler(e, list.id)} />
                 {list.tasks &&
                   list.tasks.map((task) => (
-                    <TaskRow key={task.id}>
-                      <input
-                        onChange={(e) => updateIsFinishedHandler(e, task.id)}
-                        type="checkbox"
-                        checked={task.isFinished}
-                      />
-                      <Input
-                        onChange={(e) => updateHandler(e, task.id)}
-                        type="text"
+                    <div key={task.id}>
+                      <Task
+                        handleFinishedCheck={(e) =>
+                          updateIsFinishedHandler(e, task.id)
+                        }
+                        handleChange={(e) => updateHandler(e, task.id)}
+                        handleDelete={() => deleteHandler(task.id)}
+                        defaultChecked={task.isFinished}
                         defaultValue={task.body}
                       />
-                      <Button onClick={() => updateTaskListHandler(task.id)}>
+                      {/* <button
+                        className="btn"
+                        onClick={() => updateTaskListHandler(task.id)}
+                      >
                         Change list
-                      </Button>
-                      <Button onClick={() => deleteHandler(task.id)}>
-                        Delete
-                      </Button>
-                    </TaskRow>
+                      </button> */}
+                    </div>
                   ))}
               </div>
-              <Form onSubmit={(e) => createTaskHandler(e, list.id)}>
-                <Input name="new-todo" />
-                <Button type="submit">Add task</Button>
-              </Form>
             </div>
           ))}
+        {isLoading && <Loader />}
 
-        <Form onSubmit={createTaskListHandler}>
-          <Input name="new-tasklist" />
-          <Button type="submit">Add tasklist</Button>
-        </Form>
+        <NewTaskList handleAdd={createTaskListHandler} />
       </AppLayout>
     </>
   );

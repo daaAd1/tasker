@@ -16,8 +16,6 @@
 */
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { SearchIcon } from "@heroicons/react/solid";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -31,7 +29,7 @@ export default function NavigationBar() {
           <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex px-2 lg:px-0">
-                <div className="flex-shrink-0 flex items-center">
+                <div className="shrink-0 flex items-center">
                   <img
                     className="block h-8 w-auto"
                     src="/assets/planet-scale.svg"
@@ -70,16 +68,11 @@ export default function NavigationBar() {
                 {/* Mobile menu button */}
                 <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                   <span className="sr-only">Open main menu</span>
-                  {open ? (
-                    <XIcon className="block h-6 w-6" aria-hidden="true" />
-                  ) : (
-                    <MenuIcon className="block h-6 w-6" aria-hidden="true" />
-                  )}
                 </Disclosure.Button>
               </div>
               <div className="hidden lg:ml-4 lg:flex lg:items-center">
                 {/* Profile dropdown */}
-                <Menu as="div" className="ml-4 relative flex-shrink-0">
+                <Menu as="div" className="ml-4 relative shrink-0">
                   <div>
                     <Menu.Button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                       <span className="sr-only">Open user menu</span>
@@ -180,7 +173,7 @@ export default function NavigationBar() {
             </div>
             <div className="pt-4 pb-3 border-t border-gray-200">
               <div className="flex items-center px-4">
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <img
                     className="h-10 w-10 rounded-full"
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -197,10 +190,9 @@ export default function NavigationBar() {
                 </div>
                 <button
                   type="button"
-                  className="ml-auto flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="ml-auto shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
               <div className="mt-3 space-y-1">
