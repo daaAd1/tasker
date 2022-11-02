@@ -2,11 +2,6 @@
 # yarn lockfile v1
 
 
-"@aacn_org/eslint-plugin-tailwind-classname-order@^0.2.7":
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/@aacn_org/eslint-plugin-tailwind-classname-order/-/eslint-plugin-tailwind-classname-order-0.2.7.tgz#ddf888a85009e74f0bd2fe7ece824a493cdd17f5"
-  integrity sha512-ePlOWXjKzoqS9FM4F5XIVPrquQSa4IiVk0QBHRuBe7s6LMATVl4fcDGyaoSiJec8GE0nj9sy7JR3PABj+6PFNw==
-
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.16.0":
   version "7.16.0"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.16.0.tgz#0dfc80309beec8411e65e706461c408b0bb9b431"
