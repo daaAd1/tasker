@@ -28,7 +28,7 @@ const Task = ({
       <input
         name="is_finished"
         type="checkbox"
-        className="checkbox checkbox-success"
+        className="checkbox checkbox-success peer checked:opacity-40"
         onChange={handleFinishedCheck}
         defaultChecked={defaultChecked}
       />
@@ -36,7 +36,8 @@ const Task = ({
         type="text"
         name="task_text"
         className="input input-bordered input-primary 
-        w-full max-w-xs border-base-200 rounded-md ml-4
+        w-full max-w-xs border-base-200 rounded-md ml-4 peer-checked:opacity-40
+        peer-checked:line-through
         focus:outline-info focus:outline-offset-0 focus:outline-1"
         onChange={handleChange}
         defaultValue={defaultValue}
