@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { XCircleIcon } from "@heroicons/react/24/outline";
+import MoreOptionsDropdown from "../Default/MoreOptionsDropdown";
 
 type TaskProps = {
   className?: string;
@@ -8,6 +9,8 @@ type TaskProps = {
   handleDelete: () => void;
   defaultChecked: boolean;
   defaultValue: string;
+  otherTaskLists: any[];
+  handleListChange: (listId) => void;
 };
 
 const Task = ({
@@ -17,6 +20,8 @@ const Task = ({
   handleDelete,
   defaultChecked,
   defaultValue,
+  otherTaskLists,
+  handleListChange,
 }: TaskProps) => {
   return (
     <div
@@ -46,6 +51,10 @@ const Task = ({
         {" "}
         <XCircleIcon className="h-6 w-6 text-error" />
       </button>
+      <MoreOptionsDropdown
+        taskLists={otherTaskLists}
+        handleListChange={handleListChange}
+      />
     </div>
   );
 };

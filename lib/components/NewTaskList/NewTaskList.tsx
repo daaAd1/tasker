@@ -28,6 +28,7 @@ const NewTaskList = ({ className, handleAdd }: NewTaskListProps) => {
         border-base-200 rounded-t-md
         focus:outline-info focus:outline-offset-0 focus:outline-1"
         placeholder="Type your tasklist name here"
+        required={true}
       />
       <button
         className="w-full btn btn-primary flex flex-row items-center justify-center"

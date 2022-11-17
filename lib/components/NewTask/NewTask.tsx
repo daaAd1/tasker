@@ -18,7 +18,7 @@ const NewTask = ({ className, handleAdd }: NewTaskProps) => {
       <input
         name="is_finished"
         type="checkbox"
-        className="checkbox checkbox-success  invisible"
+        className="checkbox checkbox-success invisible"
       />
       <input
         type="text"
@@ -32,6 +32,7 @@ const NewTask = ({ className, handleAdd }: NewTaskProps) => {
         {" "}
         <PlusCircleIcon className="h-6 w-6 text-accent" />
       </button>
+      <div className="invisible w-10 h-10" />
     </form>
   );
 };

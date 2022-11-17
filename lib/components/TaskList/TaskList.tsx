@@ -17,7 +17,7 @@ const TaskList = ({
   return (
     <div
       className={classNames(
-        `flex flex-row items-center mb-4 mx-auto justify-between
+        `flex flex-row items-center mx-auto justify-between
          w-full max-w-xs`,
         className
       )}
