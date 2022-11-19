@@ -102,49 +102,32 @@ const Page = ({ todoLists }) => {
     refetch();
   };
 
+  const updateTasksOrder = async (listId, tasks) => {
+    // aaa;
+    console.log("updating order");
+  };
+
   return (
     <>
       <AppLayout>
         <h1 className="text-4xl mb-10 mx-auto max-w-xs text-center">Tasker</h1>
         {data &&
           data.map((list) => {
-            const tasks = list.tasks || [];
-            const totalTasks = tasks.length;
-            const finishedTasks = tasks.filter((t) => t.isFinished).length;
             return (
               <div className="mb-6" key={list.id}>
                 <TaskList
                   defaultValue={list.name}
                   handleChange={(e) => updateListHandler(list.id, e)}
                   handleDelete={() => deleteListHandler(list.id)}
+                  list={list}
+                  createTaskHandler={createTaskHandler}
+                  updateIsFinishedHandler={updateIsFinishedHandler}
+                  updateHandler={updateHandler}
+                  deleteHandler={deleteHandler}
+                  updateTaskListHandler={updateTaskListHandler}
+                  otherTaskLists={data.filter((d) => d.id !== list.id)}
+                  updateTasksOrder={updateTasksOrder}
                 />
-                <div
-                  className="text-center mx-auto mb-8
-                  text-secondary text-opacity-60 text-sm font-semibold"
-                >
-                  {finishedTasks} of {totalTasks} tasks completed
-                </div>
-                <div className="flex flex-col gap-4">
-                  <NewTask handleAdd={(e) => createTaskHandler(e, list.id)} />
-                  {list.tasks &&
-                    list.tasks.map((task) => (
-                      <div key={task.id}>
-                        <Task
-                          handleFinishedCheck={(e) =>
-                            updateIsFinishedHandler(e, task.id)
-                          }
-                          handleChange={(e) => updateHandler(e, task.id)}
-                          handleDelete={() => deleteHandler(task.id)}
-                          handleListChange={(listId) =>
-                            updateTaskListHandler(task.id, listId)
-                          }
-                          defaultChecked={task.isFinished}
-                          defaultValue={task.body}
-                          otherTaskLists={data.filter((d) => d.id !== list.id)}
-                        />
-                      </div>
-                    ))}
-                </div>
               </div>
             );
           })}

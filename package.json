@@ -26,6 +26,7 @@
     "classnames": "^2.3.1",
     "daisyui": "^2.37.0",
     "eslint-config-next": "^13.0.0",
+    "framer-motion": "^7.6.7",
     "lodash": "^4.17.21",
     "next": "^13.0.0",
     "next-auth": "4.0.0-beta.6",
