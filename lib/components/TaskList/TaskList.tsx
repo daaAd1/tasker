@@ -34,6 +34,7 @@ const TaskList = ({
   otherTaskLists,
   updateTasksOrder,
 }: TaskProps) => {
+  const [showingType, setShowingType] = useState("all");
   const [tasks, setTasks] = useState([...list.tasks]);
 
   useEffect(() => {
@@ -53,8 +54,29 @@ const TaskList = ({
     }
     updateOrderTimeout.current = setTimeout(() => {
       updateTasksOrder(list.id, newArray);
-    }, 1000);
+    }, 200);
   };
+
+  const showingTypeOptions = [
+    {
+      value: "all",
+      name: "All",
+    },
+    {
+      value: "active",
+      name: "Active",
+    },
+    {
+      value: "completed",
+      name: "Completed",
+    },
+  ];
+  const shownTasks =
+    showingType === "completed"
+      ? tasks.filter((t) => t.isFinished)
+      : showingType === "active"
+      ? tasks.filter((t) => !t.isFinished)
+      : tasks;
 
   return (
     <>
@@ -87,7 +109,7 @@ const TaskList = ({
       <div className="flex flex-col gap-4">
         <NewTask handleAdd={(e) => createTaskHandler(e, list.id)} />
         <Reorder.Group axis="y" values={tasks} onReorder={handleReorder}>
-          {tasks.map((task) => (
+          {shownTasks.map((task) => (
             <Reorder.Item
               key={task.id}
               value={task}
@@ -107,6 +129,21 @@ const TaskList = ({
             </Reorder.Item>
           ))}
         </Reorder.Group>
+      </div>
+      <div className="flex flex-row items-center mx-auto justify-center mt-6">
+        {showingTypeOptions.map((opt, i) => {
+          return (
+            <button
+              key={opt.value}
+              className={`px-4 py-2 mx-1 font-semibold text-xs rounded-md bg-secondary h-8 ${
+                opt.value === showingType ? "opacity-100" : "opacity-60"
+              }`}
+              onClick={() => setShowingType(opt.value)}
+            >
+              {opt.name}
+            </button>
+          );
+        })}
       </div>
     </>
   );
