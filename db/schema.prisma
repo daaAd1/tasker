@@ -9,7 +9,7 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+  previewFeatures = ["referentialIntegrity", "fullTextSearch", "fullTextIndex"]
 }
 
 model Account {
@@ -86,4 +86,6 @@ model Task {
   isFinished Boolean   @default(false)
   TaskList   TaskList? @relation(fields: [taskListId], references: [id])
   taskListId String?
+
+  @@fulltext([body])
 }

@@ -10,21 +10,20 @@ import TaskList from "../lib/components/TaskList/TaskList";
 import NewTask from "../lib/components/NewTask/NewTask";
 import NewTaskList from "../lib/components/NewTaskList/NewTaskList";
 import Loader from "../lib/components/Loader";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { themeChange } from "theme-change";
+import Toggle from "../lib/components/Default/Toggle";
 
 const Page = ({ todoLists }) => {
   const { data: session } = useSession({
     required: true,
   });
-  console.log({ session });
 
   const [isLoading, setIsLoading] = useState(false);
   const { data, refetch } = useQuery(["taskLists"], async () => {
     const data = await superagent.get("/api/tasklist/load");
     return data.body;
   });
-
-  console.log({ data });
 
   const createTaskHandler = async (e, listId) => {
     e.preventDefault();
@@ -107,10 +106,38 @@ const Page = ({ todoLists }) => {
     console.log("updating order");
   };
 
+  const handleSearch = async (e) => {
+    const searchValue = e.target.value;
+    const data = await superagent
+      .get("/api/task/load")
+      .query({ q: searchValue });
+
+    console.log({ data: data.body });
+  };
+
+  useEffect(() => {
+    themeChange(false);
+  }, []);
+
   return (
     <>
       <AppLayout>
-        <h1 className="text-4xl mb-10 mx-auto max-w-xs text-center">Tasker</h1>
+        <button
+          data-toggle-theme="dark,corporate"
+          data-act-class="shadow-outline"
+        >
+          switch theme
+        </button>
+        <h1 className="text-4xl mb-4 mx-auto max-w-xs text-center">Tasker</h1>
+        <input
+          type="text"
+          name="search_tasks"
+          className="mx-auto input input-bordered input-primary block
+        w-full max-w-xs border-base-200 rounded-md mb-6
+        focus:outline-info focus:outline-offset-0 focus:outline-1"
+          onChange={handleSearch}
+          placeholder="search in tasks"
+        />
         {data &&
           data.map((list) => {
             return (
@@ -141,7 +168,6 @@ const Page = ({ todoLists }) => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-  console.log({ session });
   const todoLists = session
     ? await prisma.taskList.findMany({
         include: {
@@ -152,7 +178,6 @@ export async function getServerSideProps(context) {
         },
       })
     : [];
-  console.log({ todoLists });
 
   return {
     props: {

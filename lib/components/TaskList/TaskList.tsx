@@ -43,7 +43,7 @@ const TaskList = ({
 
   const totalTasks = tasks.length;
   const finishedTasks = tasks.filter((t) => t.isFinished).length;
-  console.log({ tasks });
+
   let updateOrderTimeout = useRef(null);
 
   const handleReorder = (newArray): void => {

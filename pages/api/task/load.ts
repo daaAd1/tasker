@@ -12,7 +12,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       message: "Unauthorized",
     });
   }
-
+  console.log({ req, query: req.query });
+  const { query } = req;
+  const { q }: { q?: string } = query || {};
   const selectInput = isEmpty(req.body?.select) ? undefined : req.body?.select;
   const whereInput = isEmpty(req.body?.where) ? undefined : req.body?.where;
   const includeInput = isEmpty(req.body?.include)
@@ -40,7 +42,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   };
 
   try {
-    const tasks = await prisma.task.findMany(findManyArgs);
+    const tasks = await prisma.task.findMany({
+      where: {
+        body: {
+          contains: q && q.length > 2 ? q : "",
+        },
+      },
+    });
 
     return res.status(200).json(tasks);
   } catch (error) {
