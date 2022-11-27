@@ -13,6 +13,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
+  const { query } = req;
+  const { listId }: { listId?: string } = query || {};
+
+  let whereObject: any = { users: { some: { id: session.user.id } } };
+  if (listId) {
+    whereObject = { identifier: listId };
+  }
   try {
     const tasks = await prisma.taskList.findMany({
       include: {
@@ -24,9 +31,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           ],
         },
       },
-      where: {
-        users: { some: { id: session.user.id } },
-      },
+      where: whereObject,
     });
 
     return res.status(200).json(tasks);

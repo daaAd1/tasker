@@ -11,7 +11,6 @@ const post = async (req: NextApiRequest, res: NextApiResponse) => {
     const taskList = await prisma.taskList.create({
       data: {
         name: req.body.name,
-        identifier: "",
         users: {
           connect: [
             {

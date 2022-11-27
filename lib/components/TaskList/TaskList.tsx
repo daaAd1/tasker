@@ -1,9 +1,11 @@
 import classNames from "classnames";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import { ShareIcon } from "@heroicons/react/24/outline";
 import { Reorder } from "framer-motion";
 import NewTask from "../NewTask/NewTask";
 import Task from "../Task/Task";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
 
 type TaskProps = {
   className?: string;
@@ -36,6 +38,7 @@ const TaskList = ({
 }: TaskProps) => {
   const [showingType, setShowingType] = useState("all");
   const [tasks, setTasks] = useState([...list.tasks]);
+  const router = useRouter();
 
   useEffect(() => {
     setTasks(list.tasks);
@@ -78,6 +81,13 @@ const TaskList = ({
       ? tasks.filter((t) => !t.isFinished)
       : tasks;
 
+  const handleCopyLink = () => {
+    if (navigator && navigator.clipboard) {
+      const origin = window.location.origin;
+      navigator.clipboard.writeText(`${origin}/list/${list.identifier}`);
+    }
+  };
+
   return (
     <>
       <div
@@ -96,6 +106,12 @@ const TaskList = ({
          focus-visible:border-b-primary-content transition-colors"
           title="Edit tasklist name"
         />
+        <button>
+          <ShareIcon
+            className="h-6 w-6 text-primary"
+            onClick={handleCopyLink}
+          />
+        </button>
         <button className="p-4" onClick={handleDelete}>
           <TrashIcon className="h-6 w-6 text-error" />
         </button>

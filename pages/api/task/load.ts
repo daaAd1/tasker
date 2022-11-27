@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       message: "Unauthorized",
     });
   }
-  console.log({ req, query: req.query });
+
   const { query } = req;
   const { q }: { q?: string } = query || {};
   const selectInput = isEmpty(req.body?.select) ? undefined : req.body?.select;
