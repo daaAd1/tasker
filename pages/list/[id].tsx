@@ -4,9 +4,11 @@ import superagent from "superagent";
 import { useQuery } from "react-query";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { themeChange } from "theme-change";
 import TaskList from "../../lib/components/TaskList/TaskList";
 import { useRouter } from "next/router";
+import classNames from "classnames";
+import { ShareIcon } from "@heroicons/react/24/outline";
+import { TrashIcon } from "@heroicons/react/24/solid";
 
 const ListPage = ({}) => {
   const { data: session } = useSession({
@@ -87,53 +89,34 @@ const ListPage = ({}) => {
     const data = await superagent
       .get("/api/task/load")
       .query({ q: searchValue });
-
-    console.log({ data: data.body });
   };
-
-  useEffect(() => {
-    themeChange(false);
-  }, []);
 
   return (
     <>
       <AppLayout>
-        <button
-          data-toggle-theme="dark,corporate"
-          data-act-class="shadow-outline"
-        >
-          switch theme
-        </button>
-        <h1 className="text-4xl mb-4 mx-auto max-w-xs text-center">Tasker</h1>
-        <input
-          type="text"
-          name="search_tasks"
-          className="mx-auto input input-bordered input-primary block
-        w-full max-w-xs border-base-200 rounded-md mb-6
-        focus:outline-info focus:outline-offset-0 focus:outline-1"
-          onChange={handleSearch}
-          placeholder="search in tasks"
-        />
-        {data &&
-          data.map((list) => {
-            return (
-              <div className="mb-6" key={list.id}>
-                <TaskList
-                  defaultValue={list.name}
-                  handleChange={(e) => updateListHandler(list.id, e)}
-                  handleDelete={() => undefined}
-                  list={list}
-                  createTaskHandler={createTaskHandler}
-                  updateIsFinishedHandler={updateIsFinishedHandler}
-                  updateHandler={updateHandler}
-                  deleteHandler={deleteHandler}
-                  updateTaskListHandler={updateTaskListHandler}
-                  otherTaskLists={data.filter((d) => d.id !== list.id)}
-                  updateTasksOrder={updateTasksOrder}
-                />
-              </div>
-            );
-          })}
+        <div>
+          {data &&
+            data.map((list) => {
+              return (
+                <div className="mb-6" key={list.id}>
+                  <TaskList
+                    defaultValue={list.name}
+                    handleChange={(e) => updateListHandler(list.id, e)}
+                    handleDelete={() => undefined}
+                    list={list}
+                    createTaskHandler={createTaskHandler}
+                    updateIsFinishedHandler={updateIsFinishedHandler}
+                    updateHandler={updateHandler}
+                    deleteHandler={deleteHandler}
+                    updateTaskListHandler={updateTaskListHandler}
+                    otherTaskLists={data.filter((d) => d.id !== list.id)}
+                    updateTasksOrder={updateTasksOrder}
+                    handleSearch={handleSearch}
+                  />
+                </div>
+              );
+            })}
+        </div>
       </AppLayout>
     </>
   );

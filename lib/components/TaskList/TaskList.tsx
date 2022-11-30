@@ -6,6 +6,7 @@ import NewTask from "../NewTask/NewTask";
 import Task from "../Task/Task";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { buildListLink } from "../../../utils";
 
 type TaskProps = {
   className?: string;
@@ -20,6 +21,7 @@ type TaskProps = {
   updateTaskListHandler: (taskId, listId) => void;
   otherTaskLists: any[];
   updateTasksOrder: (listid, tasksArray) => void;
+  handleSearch: (e) => void;
 };
 
 const TaskList = ({
@@ -35,6 +37,7 @@ const TaskList = ({
   updateTaskListHandler,
   otherTaskLists,
   updateTasksOrder,
+  handleSearch,
 }: TaskProps) => {
   const [showingType, setShowingType] = useState("all");
   const [tasks, setTasks] = useState([...list.tasks]);
@@ -84,7 +87,7 @@ const TaskList = ({
   const handleCopyLink = () => {
     if (navigator && navigator.clipboard) {
       const origin = window.location.origin;
-      navigator.clipboard.writeText(`${origin}/list/${list.identifier}`);
+      navigator.clipboard.writeText(buildListLink(list.identifier));
     }
   };
 
@@ -117,11 +120,21 @@ const TaskList = ({
         </button>
       </div>
       <div
-        className="text-center mx-auto mb-8
+        className="text-center mx-auto mb-2
     text-secondary text-opacity-60 text-sm font-semibold"
       >
         {finishedTasks} of {totalTasks} tasks completed
       </div>
+      <input
+        type="text"
+        name="search_tasks"
+        className="mx-auto input input-bordered input-primary block
+        w-full max-w-xs border-base-200 rounded-md mb-6
+        focus:outline-info focus:outline-offset-0 focus:outline-1"
+        onChange={handleSearch}
+        placeholder="search in tasks"
+      />
+
       <div className="flex flex-col gap-4">
         <NewTask handleAdd={(e) => createTaskHandler(e, list.id)} />
         <Reorder.Group axis="y" values={tasks} onReorder={handleReorder}>

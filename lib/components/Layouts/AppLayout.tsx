@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useRouter } from "next/router";
-
+import Sidebar from "../Sidebar/Sidebar";
 const AppLayout = (props) => {
   const { status, data: session } = useSession({
     required: false,
@@ -155,26 +155,9 @@ const AppLayout = (props) => {
             </div>
           </div>
           <main className="flex-1 pb-8">
-            <div className="bg-white ">
-              <div className="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-                <div className="pt-6 pb-2 md:flex md:items-center md:justify-between">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center">
-                      <div>
-                        <div className="flex items-center">
-                          <h1 className="text-xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
-                            {props.title}
-                          </h1>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div className="mt-2">
-              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-row justify-center">
+                <Sidebar />
                 {props.children}
               </div>
             </div>

@@ -2,6 +2,7 @@ import React from "react";
 import type { ExtendedAppProps } from "@lib/types";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "next-themes";
 
 import "../lib/styles/index.css";
 import "../lib/styles/reset.css";
@@ -15,15 +16,17 @@ function MyApp({
 }: ExtendedAppProps) {
   return (
     <SessionProvider session={session} refetchInterval={5 * 60}>
-      <QueryClientProvider client={queryClient}>
-        {Component.auth ? (
-          <WithAuth options={Component.auth}>
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          {Component.auth ? (
+            <WithAuth options={Component.auth}>
+              <Component {...pageProps} />
+            </WithAuth>
+          ) : (
             <Component {...pageProps} />
-          </WithAuth>
-        ) : (
-          <Component {...pageProps} />
-        )}
-      </QueryClientProvider>
+          )}
+        </QueryClientProvider>
+      </ThemeProvider>
     </SessionProvider>
   );
 }

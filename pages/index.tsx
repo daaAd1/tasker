@@ -11,8 +11,6 @@ import NewTask from "../lib/components/NewTask/NewTask";
 import NewTaskList from "../lib/components/NewTaskList/NewTaskList";
 import Loader from "../lib/components/Loader";
 import { useState, useEffect } from "react";
-import { themeChange } from "theme-change";
-import Toggle from "../lib/components/Default/Toggle";
 
 const Page = ({ todoLists }) => {
   const { data: session } = useSession({
@@ -115,52 +113,44 @@ const Page = ({ todoLists }) => {
     console.log({ data: data.body });
   };
 
-  useEffect(() => {
-    themeChange(false);
-  }, []);
-
   return (
     <>
       <AppLayout>
-        <button
-          data-toggle-theme="dark,corporate"
-          data-act-class="shadow-outline"
-        >
-          switch theme
-        </button>
-        <h1 className="text-4xl mb-4 mx-auto max-w-xs text-center">Tasker</h1>
-        <input
-          type="text"
-          name="search_tasks"
-          className="mx-auto input input-bordered input-primary block
+        <div>
+          <input
+            type="text"
+            name="search_tasks"
+            className="mx-auto input input-bordered input-primary block
         w-full max-w-xs border-base-200 rounded-md mb-6
         focus:outline-info focus:outline-offset-0 focus:outline-1"
-          onChange={handleSearch}
-          placeholder="search in tasks"
-        />
-        {data &&
-          data.map((list) => {
-            return (
-              <div className="mb-6" key={list.id}>
-                <TaskList
-                  defaultValue={list.name}
-                  handleChange={(e) => updateListHandler(list.id, e)}
-                  handleDelete={() => deleteListHandler(list.id)}
-                  list={list}
-                  createTaskHandler={createTaskHandler}
-                  updateIsFinishedHandler={updateIsFinishedHandler}
-                  updateHandler={updateHandler}
-                  deleteHandler={deleteHandler}
-                  updateTaskListHandler={updateTaskListHandler}
-                  otherTaskLists={data.filter((d) => d.id !== list.id)}
-                  updateTasksOrder={updateTasksOrder}
-                />
-              </div>
-            );
-          })}
-        {isLoading && <Loader />}
+            onChange={handleSearch}
+            placeholder="search in tasks"
+          />
 
-        <NewTaskList handleAdd={createTaskListHandler} />
+          {data &&
+            data.map((list) => {
+              return (
+                <div className="mb-6" key={list.id}>
+                  <TaskList
+                    defaultValue={list.name}
+                    handleChange={(e) => updateListHandler(list.id, e)}
+                    handleDelete={() => deleteListHandler(list.id)}
+                    list={list}
+                    createTaskHandler={createTaskHandler}
+                    updateIsFinishedHandler={updateIsFinishedHandler}
+                    updateHandler={updateHandler}
+                    deleteHandler={deleteHandler}
+                    updateTaskListHandler={updateTaskListHandler}
+                    otherTaskLists={data.filter((d) => d.id !== list.id)}
+                    updateTasksOrder={updateTasksOrder}
+                  />
+                </div>
+              );
+            })}
+          {isLoading && <Loader />}
+
+          <NewTaskList handleAdd={createTaskListHandler} />
+        </div>
       </AppLayout>
     </>
   );
