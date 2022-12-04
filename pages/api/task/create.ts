@@ -9,6 +9,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse) => {
       data: {
         body: req.body.body,
         taskListId: req.body.taskListId,
+        id: req.body.id || undefined,
       },
       select: {
         id: true,

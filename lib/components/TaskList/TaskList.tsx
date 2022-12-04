@@ -7,6 +7,8 @@ import Task from "../Task/Task";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { buildListLink } from "../../../utils";
+import prisma from "../../../db";
+import cuid from "cuid";
 
 type TaskProps = {
   className?: string;
@@ -14,7 +16,7 @@ type TaskProps = {
   handleChange: (e) => void;
   handleDelete: () => void;
   list: any;
-  createTaskHandler: (e, id) => void;
+  createTaskHandler: (e, id, createTaskHandler: string) => void;
   updateIsFinishedHandler: (e, id) => void;
   updateHandler: (e, id) => void;
   deleteHandler: (id) => void;
@@ -43,14 +45,15 @@ const TaskList = ({
   const [tasks, setTasks] = useState([...list.tasks]);
   const router = useRouter();
 
-  useEffect(() => {
-    setTasks(list.tasks);
-  }, [list.tasks]);
+  // useEffect(() => {
+  //   setTasks(list.tasks);
+  // }, [list.tasks]);
 
   const totalTasks = tasks.length;
   const finishedTasks = tasks.filter((t) => t.isFinished).length;
 
   let updateOrderTimeout = useRef(null);
+  let updateTaskTimeout = useRef(null);
 
   const handleReorder = (newArray): void => {
     setTasks(newArray);
@@ -86,9 +89,41 @@ const TaskList = ({
 
   const handleCopyLink = () => {
     if (navigator && navigator.clipboard) {
-      const origin = window.location.origin;
       navigator.clipboard.writeText(buildListLink(list.identifier));
     }
+  };
+  const createNewTask = (e): void => {
+    e.preventDefault();
+    const inputValue = e.target.elements["new-task"].value;
+    const newArray = [...tasks];
+    const generatedId = cuid();
+    newArray.unshift({
+      body: inputValue,
+      isFinished: false,
+      priority: null,
+      id: generatedId,
+    });
+    setTasks(newArray);
+    createTaskHandler(e, list.id, generatedId);
+  };
+
+  const handleTaskChange = (e, taskId): void => {
+    if (updateTaskTimeout && updateTaskTimeout.current) {
+      clearTimeout(updateTaskTimeout.current);
+    }
+    updateTaskTimeout.current = setTimeout(() => {
+      updateHandler(e, taskId);
+    }, 400);
+  };
+
+  const handleTaskDelete = (taskId): void => {
+    const newArray = [...tasks];
+    newArray.splice(
+      newArray.findIndex((t) => t.id === taskId),
+      1
+    );
+    setTasks(newArray);
+    deleteHandler(taskId);
   };
 
   return (
@@ -136,7 +171,7 @@ const TaskList = ({
       />
 
       <div className="flex flex-col gap-4">
-        <NewTask handleAdd={(e) => createTaskHandler(e, list.id)} />
+        <NewTask handleAdd={createNewTask} />
         <Reorder.Group axis="y" values={tasks} onReorder={handleReorder}>
           {shownTasks.map((task) => (
             <Reorder.Item
@@ -146,8 +181,8 @@ const TaskList = ({
             >
               <Task
                 handleFinishedCheck={(e) => updateIsFinishedHandler(e, task.id)}
-                handleChange={(e) => updateHandler(e, task.id)}
-                handleDelete={() => deleteHandler(task.id)}
+                handleChange={(e) => handleTaskChange(e, task.id)}
+                handleDelete={() => handleTaskDelete(task.id)}
                 handleListChange={(listId) =>
                   updateTaskListHandler(task.id, listId)
                 }

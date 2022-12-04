@@ -24,13 +24,14 @@ const ListPage = ({}) => {
   });
   console.log({ data });
 
-  const createTaskHandler = async (e, listId) => {
+  const createTaskHandler = async (e, listId, generatedId: string) => {
     e.preventDefault();
     const inputValue = e.target.elements["new-task"].value;
 
     await superagent.post("/api/task/create").send({
       body: inputValue,
       taskListId: listId,
+      id: generatedId,
     });
 
     refetch();
