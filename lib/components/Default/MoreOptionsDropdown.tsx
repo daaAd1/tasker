@@ -13,10 +13,11 @@ const MoreOptionsDropdown = ({
   taskLists,
   handleListChange,
 }: MoreOptionsDropdownProps) => {
+  console.log({ taskLists });
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger className="px-2 py-4">
-        <EllipsisVerticalIcon className="h-6 w-6 text-secondary-content" />
+        <EllipsisVerticalIcon className="h-6 w-6 text-gray-400" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content

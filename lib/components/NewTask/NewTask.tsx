@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 
 type NewTaskProps = {
   className?: string;
@@ -7,32 +8,41 @@ type NewTaskProps = {
 };
 
 const NewTask = ({ className, handleAdd }: NewTaskProps) => {
+  const [newTask, setNewTask] = useState("");
+
+  const handleNewTask = (e) => {
+    setNewTask(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleAdd(e);
+    setNewTask("");
+  };
+
   return (
     <form
-      onSubmit={handleAdd}
+      onSubmit={handleSubmit}
       className={classNames(
-        "flex flex-row w-full h-full justify-center content-center items-center",
+        `border border-gray-200 rounded-sm shadow-sm mb-6
+        flex flex-row w-full h-full justify-center content-center items-center`,
         className
       )}
     >
       <input
-        name="is_finished"
-        type="checkbox"
-        className="checkbox checkbox-success invisible"
-      />
-      <input
         type="text"
         name="new-task"
-        className="input input-bordered w-full max-w-xs 
-        border-base-200 rounded-md ml-4
-        focus:outline-info focus:outline-offset-0 focus:outline-1"
+        className="py-4 ml-4 mr-4 w-full outline-none focus-within:outline-none bg-transparent"
         placeholder="Type your new task here"
+        onChange={handleNewTask}
+        value={newTask}
       />
-      <button className="p-4" type="submit">
-        {" "}
-        <PlusCircleIcon className="h-6 w-6 text-accent" />
+      <button
+        className="px-4 py-2 text-4xl bg-success text-white"
+        type="submit"
+      >
+        {"+"}
       </button>
-      <div className="invisible w-10 h-10" />
     </form>
   );
 };

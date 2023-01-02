@@ -170,9 +170,14 @@ const TaskList = ({
         placeholder="search in tasks"
       />
 
-      <div className="flex flex-col gap-4">
+      <div className="">
         <NewTask handleAdd={createNewTask} />
-        <Reorder.Group axis="y" values={tasks} onReorder={handleReorder}>
+        <Reorder.Group
+          className="flex flex-col gap-2"
+          axis="y"
+          values={tasks}
+          onReorder={handleReorder}
+        >
           {shownTasks.map((task) => (
             <Reorder.Item
               key={task.id}

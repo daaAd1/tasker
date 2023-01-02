@@ -24,33 +24,32 @@ const Task = ({
   handleListChange,
 }: TaskProps) => {
   return (
-    <div
-      className={classNames(
-        "flex flex-row w-full h-full justify-center content-center items-center",
-        className
-      )}
-    >
-      <input
-        name="is_finished"
-        type="checkbox"
-        className="checkbox checkbox-success peer checked:opacity-40"
-        onChange={handleFinishedCheck}
-        defaultChecked={defaultChecked}
-      />
-      <input
-        type="text"
-        name="task_text"
-        className="input input-bordered input-primary 
-        w-full max-w-xs border-base-200 rounded-md ml-4 peer-checked:opacity-40
-        peer-checked:line-through
-        focus:outline-info focus:outline-offset-0 focus:outline-1"
-        onChange={handleChange}
-        defaultValue={defaultValue}
-      />
-      <button className="p-4" onClick={handleDelete}>
-        {" "}
-        <XCircleIcon className="h-6 w-6 text-error" />
-      </button>
+    <div className="flex flex-row items-center justify-center w-full">
+      <div
+        className={classNames(
+          `w-full relative border border-gray-200 rounded-sm
+           flex flex-row justify-between items-center px-4 shadow-sm`,
+          className
+        )}
+      >
+        <input
+          name="is_finished"
+          type="checkbox"
+          className="absolute checkbox checkbox-success peer checked:opacity-40"
+          onChange={handleFinishedCheck}
+          defaultChecked={defaultChecked}
+        />
+        <input
+          type="text"
+          name="task_text"
+          className="py-4 mx-10 w-full outline-none focus-within:outline-none bg-transparent"
+          onChange={handleChange}
+          defaultValue={defaultValue}
+        />
+        <button className="absolute p-4 right-0" onClick={handleDelete}>
+          <XCircleIcon className="h-6 w-6 text-error" />
+        </button>
+      </div>
       <MoreOptionsDropdown
         taskLists={otherTaskLists}
         handleListChange={handleListChange}
