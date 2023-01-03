@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useLocalStorage, useMediaQuery, useUpdateEffect } from "usehooks-ts";
 
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
@@ -28,6 +29,19 @@ function useDarkMode(defaultValue?: boolean): UseDarkModeOutput {
     enable: () => setDarkMode(true),
     disable: () => setDarkMode(false),
   };
+}
+
+export function useAutosizeTextArea(
+  textAreaRef: HTMLTextAreaElement | null,
+  value: string
+) {
+  useEffect(() => {
+    if (textAreaRef) {
+      textAreaRef.style.height = "0px";
+      const scrollHeight = textAreaRef.scrollHeight;
+      textAreaRef.style.height = scrollHeight + "px";
+    }
+  }, [textAreaRef, value]);
 }
 
 export default useDarkMode;

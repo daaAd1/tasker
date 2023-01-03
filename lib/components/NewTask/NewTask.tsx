@@ -21,29 +21,31 @@ const NewTask = ({ className, handleAdd }: NewTaskProps) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={classNames(
-        `border border-gray-200 rounded-sm shadow-sm mb-6
+    <div className=" w-full">
+      <form
+        onSubmit={handleSubmit}
+        className={classNames(
+          `border border-gray-200 rounded-sm shadow-sm mb-6
         flex flex-row w-full h-full justify-center content-center items-center`,
-        className
-      )}
-    >
-      <input
-        type="text"
-        name="new-task"
-        className="py-4 ml-4 mr-4 w-full outline-none focus-within:outline-none bg-transparent"
-        placeholder="Type your new task here"
-        onChange={handleNewTask}
-        value={newTask}
-      />
-      <button
-        className="px-4 py-2 text-4xl bg-success text-white"
-        type="submit"
+          className
+        )}
       >
-        {"+"}
-      </button>
-    </form>
+        <input
+          type="text"
+          name="new-task"
+          className="py-4 ml-4 mr-4 w-full outline-none focus-within:outline-none bg-transparent"
+          placeholder="Type your new task here"
+          onChange={handleNewTask}
+          value={newTask}
+        />
+        <button
+          className="px-4 py-2 text-4xl font-semibold bg-success text-white"
+          type="submit"
+        >
+          {"+"}
+        </button>
+      </form>
+    </div>
   );
 };
 

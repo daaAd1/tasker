@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { ShareIcon } from "@heroicons/react/24/outline";
-import { Reorder } from "framer-motion";
+import { Reorder, useDragControls } from "framer-motion";
 import NewTask from "../NewTask/NewTask";
 import Task from "../Task/Task";
 import { useEffect, useRef, useState } from "react";
@@ -131,7 +131,7 @@ const TaskList = ({
       <div
         className={classNames(
           `flex flex-row items-center mx-auto justify-between
-         w-full max-w-xs`,
+         w-full max-w-md`,
           className
         )}
       >
@@ -179,23 +179,19 @@ const TaskList = ({
           onReorder={handleReorder}
         >
           {shownTasks.map((task) => (
-            <Reorder.Item
+            <Task
+              task={task}
               key={task.id}
-              value={task}
-              className="cursor-grabbing"
-            >
-              <Task
-                handleFinishedCheck={(e) => updateIsFinishedHandler(e, task.id)}
-                handleChange={(e) => handleTaskChange(e, task.id)}
-                handleDelete={() => handleTaskDelete(task.id)}
-                handleListChange={(listId) =>
-                  updateTaskListHandler(task.id, listId)
-                }
-                defaultChecked={task.isFinished}
-                defaultValue={task.body}
-                otherTaskLists={otherTaskLists}
-              />
-            </Reorder.Item>
+              handleFinishedCheck={(e) => updateIsFinishedHandler(e, task.id)}
+              handleChange={(e) => handleTaskChange(e, task.id)}
+              handleDelete={() => handleTaskDelete(task.id)}
+              handleListChange={(listId) =>
+                updateTaskListHandler(task.id, listId)
+              }
+              defaultChecked={task.isFinished}
+              defaultValue={task.body}
+              otherTaskLists={otherTaskLists}
+            />
           ))}
         </Reorder.Group>
       </div>

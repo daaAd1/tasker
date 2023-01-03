@@ -156,7 +156,10 @@ const AppLayout = (props) => {
           </div>
           <main className="flex-1 pb-8">
             <div className="mt-2">
-              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-row justify-center">
+              <div
+                className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col
+               md:flex-row justify-center"
+              >
                 <Sidebar />
                 {props.children}
               </div>

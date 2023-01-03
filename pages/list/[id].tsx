@@ -22,7 +22,10 @@ const ListPage = ({}) => {
     const data = await superagent.get(`/api/tasklist/load`).query({ listId });
     return data.body;
   });
-  console.log({ data });
+  const { data: allListsData } = useQuery(["taskLists"], async () => {
+    const data = await superagent.get("/api/tasklist/load");
+    return data.body;
+  });
 
   const createTaskHandler = async (e, listId, generatedId: string) => {
     e.preventDefault();
@@ -110,7 +113,10 @@ const ListPage = ({}) => {
                     updateHandler={updateHandler}
                     deleteHandler={deleteHandler}
                     updateTaskListHandler={updateTaskListHandler}
-                    otherTaskLists={data.filter((d) => d.id !== list.id)}
+                    otherTaskLists={
+                      allListsData &&
+                      allListsData.filter((d) => d.id !== list.id)
+                    }
                     updateTasksOrder={updateTasksOrder}
                     handleSearch={handleSearch}
                   />
