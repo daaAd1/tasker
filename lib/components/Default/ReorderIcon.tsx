@@ -7,7 +7,7 @@ interface Props {
 export function ReorderIcon({ dragControls }: Props) {
   return (
     <button
-      className="absolute right-10 p-2"
+      className="absolute right-10 p-2 cursor-grabbing"
       onPointerDown={(event) => dragControls.start(event)}
       onTouchStart={(event) => dragControls.start(event)}
     >

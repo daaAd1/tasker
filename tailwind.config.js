@@ -5,7 +5,11 @@ module.exports = {
     "./lib/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      spacing: {
+        18: "4.5rem",
+      },
+    },
   },
   plugins: [require("@tailwindcss/line-clamp"), require("daisyui")],
 };

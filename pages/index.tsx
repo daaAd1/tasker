@@ -11,17 +11,25 @@ import NewTask from "../lib/components/NewTask/NewTask";
 import NewTaskList from "../lib/components/NewTaskList/NewTaskList";
 import Loader from "../lib/components/Loader";
 import { useState, useEffect } from "react";
+import { toastWrapper } from "../utils";
 
-const Page = ({ todoLists }) => {
+const Page = ({ taskLists }) => {
   const { data: session } = useSession({
     required: true,
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const { data, refetch } = useQuery(["taskLists"], async () => {
-    const data = await superagent.get("/api/tasklist/load");
-    return data.body;
-  });
+  const { data, refetch } = useQuery(
+    ["taskLists"],
+    async () => {
+      const data = await superagent.get("/api/tasklist/load");
+      return data.body;
+    },
+
+    {
+      initialData: taskLists,
+    }
+  );
 
   const createTaskHandler = async (e, listId) => {
     e.preventDefault();
@@ -100,33 +108,17 @@ const Page = ({ todoLists }) => {
   };
 
   const updateTasksOrder = async (listId, tasks) => {
-    // aaa;
-    console.log("updating order");
-  };
-
-  const handleSearch = async (e) => {
-    const searchValue = e.target.value;
-    const data = await superagent
-      .get("/api/task/load")
-      .query({ q: searchValue });
-
-    console.log({ data: data.body });
+    await toastWrapper(async () => {
+      await superagent.put("/api/task/priority/update").send({
+        tasks,
+      });
+    });
   };
 
   return (
     <>
       <AppLayout>
         <div>
-          <input
-            type="text"
-            name="search_tasks"
-            className="mx-auto input input-bordered input-primary block
-        w-full max-w-xs border-base-200 rounded-md mb-6
-        focus:outline-info focus:outline-offset-0 focus:outline-1"
-            onChange={handleSearch}
-            placeholder="search in tasks"
-          />
-
           {data &&
             data.map((list) => {
               return (
@@ -158,10 +150,19 @@ const Page = ({ todoLists }) => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-  const todoLists = session
+  const taskLists = session
     ? await prisma.taskList.findMany({
         include: {
-          tasks: true,
+          tasks: {
+            orderBy: [
+              {
+                priority: "asc",
+              },
+              {
+                createdAt: "desc",
+              },
+            ],
+          },
         },
         where: {
           users: { some: { id: session.user.id } },
@@ -172,7 +173,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       session,
-      todoLists: JSON.parse(JSON.stringify(todoLists)),
+      taskLists: JSON.parse(JSON.stringify(taskLists)),
     },
   };
 }

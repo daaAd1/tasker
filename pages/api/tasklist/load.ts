@@ -26,6 +26,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         tasks: {
           orderBy: [
             {
+              priority: "asc",
+            },
+            {
               createdAt: "desc",
             },
           ],

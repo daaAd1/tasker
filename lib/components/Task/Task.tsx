@@ -16,6 +16,7 @@ type TaskProps = {
   otherTaskLists: any[];
   handleListChange: (listId) => void;
   task: any;
+  noReorder?: boolean;
 };
 
 const Task = ({
@@ -28,6 +29,7 @@ const Task = ({
   otherTaskLists,
   handleListChange,
   task,
+  noReorder,
 }: TaskProps) => {
   const dragControls = useDragControls();
   const [value, setValue] = useState(defaultValue);
@@ -52,49 +54,60 @@ const Task = ({
     setValue(e.target.value);
   };
 
-  return (
-    <Reorder.Item
-      value={task}
-      id={task.id}
-      className="cursor-grabbing"
-      dragListener={false}
-      dragControls={dragControls}
-    >
+  const renderTaskContent = () => {
+    return (
       <div className="flex flex-row items-center justify-center w-full">
         <div
           className={classNames(
             `w-full relative border border-gray-200 rounded-sm
-           flex flex-row justify-between items-center px-4 shadow-sm`,
+   flex flex-row justify-between items-center px-4 shadow-sm`,
             className
           )}
         >
           <input
             name="is_finished"
             type="checkbox"
-            className="absolute checkbox checkbox-success rounded-sm peer checked:opacity-40"
+            className="peer absolute checkbox checkbox-success rounded-sm peer checked:opacity-40"
             onChange={handleFinishedCheck}
             defaultChecked={defaultChecked}
           />
           <textarea
             name="task_text"
-            className="py-4 ml-10 overflow-hidden
-             w-full mr-20 outline-none focus-within:outline-none bg-transparent resize-none"
+            className="py-4 ml-10 overflow-hidden peer-checked:opacity-40 peer-checked:line-through
+     w-full mr-18 outline-none focus-within:outline-none bg-transparent resize-none"
             onChange={handleTaskChange}
             value={value}
             rows={1}
             ref={textAreaRef}
           />
-          <button className="absolute p-4 right-0" onClick={handleDelete}>
+          <ReorderIcon dragControls={dragControls} />
+          <button className="absolute p-3 right-0" onClick={handleDelete}>
             <XCircleIcon className="h-6 w-6 text-error" />
           </button>
-          <ReorderIcon dragControls={dragControls} />
         </div>
         {/* <MoreOptionsDropdown
-        taskLists={otherTaskLists}
-        handleListChange={handleListChange}
-      /> */}
+taskLists={otherTaskLists}
+handleListChange={handleListChange}
+/> */}
       </div>
-    </Reorder.Item>
+    );
+  };
+
+  return (
+    <>
+      {noReorder ? (
+        renderTaskContent()
+      ) : (
+        <Reorder.Item
+          value={task}
+          id={task.id}
+          dragListener={false}
+          dragControls={dragControls}
+        >
+          {renderTaskContent()}
+        </Reorder.Item>
+      )}
+    </>
   );
 };
 

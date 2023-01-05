@@ -9,15 +9,18 @@ import { useRouter } from "next/router";
 import classNames from "classnames";
 import { ShareIcon } from "@heroicons/react/24/outline";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import prisma from "../../db";
+import toast from "react-hot-toast";
+import { toastWrapper } from "../../utils";
 
 const ListPage = ({}) => {
   const { data: session } = useSession({
     required: false,
   });
+
   const router = useRouter();
   const listId = router.query.id as string;
 
-  const [isLoading, setIsLoading] = useState(false);
   const { data, refetch } = useQuery([`taskListDetail-${listId}`], async () => {
     const data = await superagent.get(`/api/tasklist/load`).query({ listId });
     return data.body;
@@ -58,9 +61,11 @@ const ListPage = ({}) => {
 
   const updateHandler = async (e, id) => {
     const newVal = e.target.value;
-    await superagent.put("/api/task/update").send({
-      body: newVal,
-      id,
+    await toastWrapper(async () => {
+      await superagent.put("/api/task/update").send({
+        body: newVal,
+        id,
+      });
     });
   };
 
@@ -70,11 +75,9 @@ const ListPage = ({}) => {
       isFinished: newVal,
       id,
     });
-
-    // refetch();
   };
 
-  const updateTaskListHandler = async (taskId, listId) => {
+  const updateTaskListHandler = async (taskId, listId): Promise<void> => {
     await superagent.put("/api/task/update").send({
       id: taskId,
       taskListId: listId,
@@ -83,16 +86,20 @@ const ListPage = ({}) => {
     refetch();
   };
 
-  const updateTasksOrder = async (listId, tasks) => {
-    // aaa;
-    console.log("updating order");
+  const updateTasksOrder = async (listId, tasks): Promise<void> => {
+    await toastWrapper(async () => {
+      await superagent.put("/api/task/priority/update").send({
+        tasks,
+      });
+    });
   };
 
-  const handleSearch = async (e) => {
-    const searchValue = e.target.value;
-    const data = await superagent
-      .get("/api/task/load")
-      .query({ q: searchValue });
+  const handleListDelete = async (id: string): Promise<void> => {
+    await superagent.delete("/api/tasklist/delete").send({
+      id,
+    });
+
+    router.push("/");
   };
 
   return (
@@ -106,7 +113,7 @@ const ListPage = ({}) => {
                   <TaskList
                     defaultValue={list.name}
                     handleChange={(e) => updateListHandler(list.id, e)}
-                    handleDelete={() => undefined}
+                    handleDelete={handleListDelete}
                     list={list}
                     createTaskHandler={createTaskHandler}
                     updateIsFinishedHandler={updateIsFinishedHandler}
@@ -118,7 +125,6 @@ const ListPage = ({}) => {
                       allListsData.filter((d) => d.id !== list.id)
                     }
                     updateTasksOrder={updateTasksOrder}
-                    handleSearch={handleSearch}
                   />
                 </div>
               );

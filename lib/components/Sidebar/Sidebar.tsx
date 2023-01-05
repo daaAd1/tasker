@@ -70,24 +70,26 @@ const Sidebar = ({ className }: SidebarProps) => {
         {isLoading ? (
           <Loader />
         ) : (
-          data &&
-          data.map((list) => {
-            return (
-              <div key={list.id} className="group w-fit">
-                <Link
-                  className="rounded-xl text-gray-400 group-hover:text-gray-800 
-                transition-all duration-300 pb-2 text-right"
-                  href={buildListLink(list.identifier)}
-                >
-                  {list.name}
-                </Link>
-                <div
-                  className="w-4 bg-gray-200 h-px  group-hover:w-full transition-all duration-300
-              group-hover:bg-gray-800"
-                />
-              </div>
-            );
-          })
+          <div className="flex flex-row md:flex-col justify-start items-start overflow-x-auto md:overflow-hidden">
+            {data &&
+              data.map((list) => {
+                return (
+                  <div key={list.id} className="group w-full shrink-0 md:w-fit">
+                    <Link
+                      className="rounded-xl text-left text-gray-400 group-hover:text-gray-800 
+                  transition-all duration-300 pb-2 break-all"
+                      href={buildListLink(list.identifier)}
+                    >
+                      {list.name}
+                    </Link>
+                    <div
+                      className="w-4 bg-gray-200 h-px  group-hover:w-full transition-all duration-300
+                  group-hover:bg-gray-800"
+                    />
+                  </div>
+                );
+              })}
+          </div>
         )}
       </aside>
     </div>

@@ -5,6 +5,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useRouter } from "next/router";
 import Sidebar from "../Sidebar/Sidebar";
+import { Toaster } from "react-hot-toast";
 const AppLayout = (props) => {
   const { status, data: session } = useSession({
     required: false,
@@ -54,7 +55,7 @@ const AppLayout = (props) => {
       />
       <div className="min-h-screen">
         <div className="flex flex-col flex-1">
-          <div className="border-b">
+          {/* <div className="border-b">
             <div className="relative shrink-0 flex h-16 bg-white">
               <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
                 <button
@@ -153,8 +154,8 @@ const AppLayout = (props) => {
                 </div>
               </div>
             </div>
-          </div>
-          <main className="flex-1 pb-8">
+          </div> */}
+          <main className="flex-1 pb-8 pt-10">
             <div className="mt-2">
               <div
                 className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col
@@ -165,6 +166,7 @@ const AppLayout = (props) => {
               </div>
             </div>
           </main>
+          <Toaster position="bottom-right" reverseOrder={false} />
         </div>
       </div>
     </>
