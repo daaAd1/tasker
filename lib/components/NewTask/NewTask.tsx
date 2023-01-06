@@ -21,7 +21,7 @@ const NewTask = ({ className, handleAdd }: NewTaskProps) => {
   };
 
   return (
-    <div className=" w-full">
+    <div className="h-14 mb-6 w-full">
       <form
         onSubmit={handleSubmit}
         className={classNames(

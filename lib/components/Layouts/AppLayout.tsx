@@ -155,15 +155,13 @@ const AppLayout = (props) => {
               </div>
             </div>
           </div> */}
-          <main className="flex-1 pb-8 pt-10">
-            <div className="mt-2">
-              <div
-                className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col
+          <main className="flex-1">
+            <div
+              className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col
                md:flex-row justify-center"
-              >
-                <Sidebar />
-                {props.children}
-              </div>
+            >
+              <Sidebar />
+              {props.children}
             </div>
           </main>
           <Toaster position="bottom-right" reverseOrder={false} />

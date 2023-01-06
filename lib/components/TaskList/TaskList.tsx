@@ -178,12 +178,13 @@ const TaskList = ({
     handleChange(e);
     setValue(e.target.value);
   };
+
   return (
-    <>
+    <div className="w-full absolute top-0 bottom-0 left-0 flex flex-col p-6 pt-4">
       <div
         className={classNames(
-          `flex flex-row items-center mx-auto justify-between
-         w-full max-w-md mb-4`,
+          `flex flex-row items-center justify-start
+         w-full max-w-md mt-1`,
           className
         )}
       >
@@ -196,10 +197,18 @@ const TaskList = ({
          focus-visible:border-b-primary-content transition-colors 
          focus-within:border-b-primary-content active:border-b-primary-content
           focus-within:border-b-2 pr-4 overflow-hidden bg-transparent
-          resize-none"
+          resize-none max-w-xs"
           title="Edit tasklist name"
           ref={textAreaRef}
         />
+      </div>
+      <div className="flex flex-row items-center justify-start">
+        <div
+          className="mr-4 text-gray-600
+        text-opacity-60 text-xs font-semibold"
+        >
+          {finishedTasks} of {totalTasks} tasks completed
+        </div>
         <button>
           <ShareIcon
             className="h-6 w-6 text-gray-600 cursor-copy"
@@ -209,12 +218,6 @@ const TaskList = ({
         <button className="p-4" onClick={handleTaskListDelete}>
           <TrashIcon className="h-6 w-6 text-error" />
         </button>
-      </div>
-      <div
-        className=" mx-auto mb-2 text-gray-600
-    text-opacity-60 text-xs font-semibold"
-      >
-        {finishedTasks} of {totalTasks} tasks completed
       </div>
       <div className="relative">
         <input
@@ -232,11 +235,11 @@ const TaskList = ({
         />
       </div>
 
-      <div className="mt-12">
+      <div className="mt-0 flex-grow flex flex-col min-h-0">
         <NewTask handleAdd={createNewTask} />
 
         {searchData && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 overflow-y-auto">
             {searchData.map((task) => (
               <Task
                 noReorder={true}
@@ -255,30 +258,34 @@ const TaskList = ({
             ))}
           </div>
         )}
-        {!searchData && (
-          <Reorder.Group
-            className="flex flex-col gap-2"
-            axis="y"
-            values={tasks}
-            onReorder={handleReorder}
-          >
-            {shownTasks.map((task) => (
-              <Task
-                task={task}
-                key={task.id}
-                handleFinishedCheck={(e) => updateIsFinishedHandler(e, task.id)}
-                handleChange={(e) => handleTaskChange(e, task.id)}
-                handleDelete={() => handleTaskDelete(task.id)}
-                handleListChange={(listId) =>
-                  updateTaskListHandler(task.id, listId)
-                }
-                defaultChecked={task.isFinished}
-                defaultValue={task.body}
-                otherTaskLists={otherTaskLists}
-              />
-            ))}
-          </Reorder.Group>
-        )}
+        <div className="flex-grow-1 flex flex-col min-h-0 overflow-x-hidden">
+          {!searchData && (
+            <Reorder.Group
+              className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto min-h-0 flex-grow"
+              axis="y"
+              values={tasks}
+              onReorder={handleReorder}
+            >
+              {shownTasks.map((task) => (
+                <Task
+                  task={task}
+                  key={task.id}
+                  handleFinishedCheck={(e) =>
+                    updateIsFinishedHandler(e, task.id)
+                  }
+                  handleChange={(e) => handleTaskChange(e, task.id)}
+                  handleDelete={() => handleTaskDelete(task.id)}
+                  handleListChange={(listId) =>
+                    updateTaskListHandler(task.id, listId)
+                  }
+                  defaultChecked={task.isFinished}
+                  defaultValue={task.body}
+                  otherTaskLists={otherTaskLists}
+                />
+              ))}
+            </Reorder.Group>
+          )}
+        </div>
       </div>
       <div className="flex flex-row items-center mx-auto justify-center mt-6">
         {showingTypeOptions.map((opt, i) => {
@@ -295,7 +302,7 @@ const TaskList = ({
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 

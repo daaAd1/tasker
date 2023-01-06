@@ -16,3 +16,15 @@ h6 {
   font-family: "Exo 2", sans-serif;
   font-weight: 600;
 }
+
+.backface-visible {
+  backface-visibility: visible;
+}
+
+.backface-invisible {
+  backface-visibility: hidden;
+}
+
+.perspective-default {
+  perspective: 1000px;
+}

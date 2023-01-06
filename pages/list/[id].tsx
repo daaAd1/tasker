@@ -12,6 +12,7 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 import prisma from "../../db";
 import toast from "react-hot-toast";
 import { toastWrapper } from "../../utils";
+import FlippingCard from "../../lib/components/Default/FlippingCard";
 
 const ListPage = ({}) => {
   const { data: session } = useSession({
@@ -105,11 +106,41 @@ const ListPage = ({}) => {
   return (
     <>
       <AppLayout>
-        <div>
+        <FlippingCard
+          renderTodayList={() => {
+            return (
+              <>
+                {data &&
+                  data.map((list) => {
+                    return (
+                      <div className="mb-6" key={list.id}>
+                        <TaskList
+                          defaultValue={"Today's agenda"}
+                          handleChange={(e) => updateListHandler(list.id, e)}
+                          handleDelete={handleListDelete}
+                          list={list}
+                          createTaskHandler={createTaskHandler}
+                          updateIsFinishedHandler={updateIsFinishedHandler}
+                          updateHandler={updateHandler}
+                          deleteHandler={deleteHandler}
+                          updateTaskListHandler={updateTaskListHandler}
+                          otherTaskLists={
+                            allListsData &&
+                            allListsData.filter((d) => d.id !== list.id)
+                          }
+                          updateTasksOrder={updateTasksOrder}
+                        />
+                      </div>
+                    );
+                  })}
+              </>
+            );
+          }}
+        >
           {data &&
             data.map((list) => {
               return (
-                <div className="mb-6" key={list.id}>
+                <div className="" key={list.id}>
                   <TaskList
                     defaultValue={list.name}
                     handleChange={(e) => updateListHandler(list.id, e)}
@@ -129,7 +160,7 @@ const ListPage = ({}) => {
                 </div>
               );
             })}
-        </div>
+        </FlippingCard>
       </AppLayout>
     </>
   );
