@@ -13,6 +13,7 @@ import prisma from "../../db";
 import toast from "react-hot-toast";
 import { toastWrapper } from "../../utils";
 import FlippingCard from "../../lib/components/Default/FlippingCard";
+import TaskListCard from "../../lib/components/TaskListCard/TaskListCard";
 
 const ListPage = ({}) => {
   const { data: session } = useSession({
@@ -137,7 +138,7 @@ const ListPage = ({}) => {
             );
           }}
         >
-          {data &&
+          {/* {data &&
             data.map((list) => {
               return (
                 <div className="" key={list.id}>
@@ -159,7 +160,31 @@ const ListPage = ({}) => {
                   />
                 </div>
               );
-            })}
+            })} */}
+          <h2 className="text-2xl font-semibold mb-6 px-6 pt-5">Your lists</h2>
+          <div className="flex flex-row flex-wrap w-full px-6 py-4 gap-6">
+            {allListsData &&
+              allListsData.map((list) => {
+                return (
+                  <TaskListCard
+                    defaultValue={list.name}
+                    handleChange={(e) => updateListHandler(list.id, e)}
+                    handleDelete={handleListDelete}
+                    list={list}
+                    createTaskHandler={createTaskHandler}
+                    updateIsFinishedHandler={updateIsFinishedHandler}
+                    updateHandler={updateHandler}
+                    deleteHandler={deleteHandler}
+                    updateTaskListHandler={updateTaskListHandler}
+                    otherTaskLists={
+                      allListsData &&
+                      allListsData.filter((d) => d.id !== list.id)
+                    }
+                    updateTasksOrder={updateTasksOrder}
+                  />
+                );
+              })}
+          </div>
         </FlippingCard>
       </AppLayout>
     </>

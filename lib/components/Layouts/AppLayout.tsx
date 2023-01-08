@@ -6,6 +6,7 @@ import { Fragment } from "react";
 import { useRouter } from "next/router";
 import Sidebar from "../Sidebar/Sidebar";
 import { Toaster } from "react-hot-toast";
+import HeaderTitle from "../HeaderTitle/HeaderTitle";
 const AppLayout = (props) => {
   const { status, data: session } = useSession({
     required: false,
@@ -53,8 +54,8 @@ const AppLayout = (props) => {
         href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600&family=Montserrat:wght@300;400;600&display=swap"
         rel="stylesheet"
       />
-      <div className="min-h-screen">
-        <div className="flex flex-col flex-1">
+      <div className="min-h-screen  bg-gray-100">
+        <div className="flex flex-col flex-1 max-w-4xl w-full mx-auto px-4">
           {/* <div className="border-b">
             <div className="relative shrink-0 flex h-16 bg-white">
               <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
@@ -155,14 +156,9 @@ const AppLayout = (props) => {
               </div>
             </div>
           </div> */}
-          <main className="flex-1">
-            <div
-              className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col
-               md:flex-row justify-center"
-            >
-              <Sidebar />
-              {props.children}
-            </div>
+          <HeaderTitle />
+          <main className="flex-1 w-full mx-auto flex flex-col md:flex-row justify-center">
+            {props.children}
           </main>
           <Toaster position="bottom-right" reverseOrder={false} />
         </div>

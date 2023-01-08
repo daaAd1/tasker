@@ -17,6 +17,8 @@ type TaskProps = {
   handleListChange: (listId) => void;
   task: any;
   noReorder?: boolean;
+  isPreview;
+  isPreview?: boolean;
 };
 
 const Task = ({
@@ -30,6 +32,7 @@ const Task = ({
   handleListChange,
   task,
   noReorder,
+  isPreview,
 }: TaskProps) => {
   const dragControls = useDragControls();
   const [value, setValue] = useState(defaultValue);
@@ -56,7 +59,10 @@ const Task = ({
 
   const renderTaskContent = () => {
     return (
-      <div className="flex flex-row items-center justify-center w-full">
+      <div
+        className={`flex flex-row items-center justify-center w-full
+      ${isPreview ? "h-10" : ""}`}
+      >
         <div
           className={classNames(
             `w-full relative border border-gray-200 rounded-sm
@@ -64,26 +70,33 @@ const Task = ({
             className
           )}
         >
-          <input
-            name="is_finished"
-            type="checkbox"
-            className="peer absolute checkbox checkbox-success rounded-sm peer checked:opacity-40"
-            onChange={handleFinishedCheck}
-            defaultChecked={defaultChecked}
-          />
+          {!isPreview && (
+            <input
+              name="is_finished"
+              type="checkbox"
+              className="peer absolute checkbox checkbox-success rounded-sm peer checked:opacity-40"
+              onChange={handleFinishedCheck}
+              defaultChecked={defaultChecked}
+            />
+          )}
           <textarea
             name="task_text"
-            className="py-4 ml-10 overflow-hidden peer-checked:opacity-40 peer-checked:line-through
-     w-full mr-18 outline-none focus-within:outline-none bg-transparent resize-none"
+            className={`overflow-hidden peer-checked:opacity-40 peer-checked:line-through
+     w-full ${noReorder ? (isPreview ? "mr-0" : "mr-9") : "mr-18"}
+     ${isPreview ? "ml-0" : "ml-10"} ${isPreview ? "line-clamp-1" : "py-4"}
+        outline-none focus-within:outline-none bg-transparent resize-none`}
             onChange={handleTaskChange}
             value={value}
             rows={1}
-            ref={textAreaRef}
+            ref={isPreview ? null : textAreaRef}
+            readOnly={isPreview}
           />
-          <ReorderIcon dragControls={dragControls} />
-          <button className="absolute p-3 right-0" onClick={handleDelete}>
-            <XCircleIcon className="h-6 w-6 text-error" />
-          </button>
+          {!noReorder && <ReorderIcon dragControls={dragControls} />}
+          {!isPreview && (
+            <button className="absolute p-3 right-0" onClick={handleDelete}>
+              <XCircleIcon className="h-6 w-6 text-error" />
+            </button>
+          )}
         </div>
         {/* <MoreOptionsDropdown
 taskLists={otherTaskLists}

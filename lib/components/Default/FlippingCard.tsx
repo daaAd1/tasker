@@ -34,8 +34,11 @@ const FlippingCard = ({ children, renderTodayList }) => {
   };
 
   return (
-    <div className="w-full h-full bg-gray-200 justify-center items-center">
-      <div className="max-w-full h-screen whitespace-nowrap overflow-hidden w-full p-10 perspective-default">
+    <div className="w-full h-full bg-gray-100 justify-center items-center">
+      <div
+        className="max-w-full h-screen whitespace-nowrap overflow-hidden w-full
+        perspective-default"
+      >
         <motion.div
           className="relative inline-block w-full h-full bg-white margin-10 rounded-2xl"
           variants={cardVariants}
