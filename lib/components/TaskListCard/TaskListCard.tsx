@@ -14,6 +14,7 @@ import superagent from "superagent";
 import { useAutosizeTextArea } from "../../../utils/hooks";
 import { confirmAlert } from "react-confirm-alert";
 import ConfirmModal from "../Default/ConfirmModal";
+import CardTask from "../CardTask/CardTask";
 
 type Props = {
   className?: string;
@@ -45,7 +46,7 @@ const TaskListCard = ({
   updateTasksOrder,
 }: Props) => {
   const [showingType, setShowingType] = useState("all");
-  const [tasks, setTasks] = useState([...list.tasks]);
+  const tasks = list.tasks;
   const [searchData, setSearchData] = useState(null);
 
   const [value, setValue] = useState(defaultValue);
@@ -68,34 +69,6 @@ const TaskListCard = ({
   const totalTasks = tasks.length;
   const finishedTasks = tasks.filter((t) => t.isFinished).length;
 
-  let updateOrderTimeout = useRef(null);
-  let updateTaskTimeout = useRef(null);
-
-  const handleReorder = (newArray): void => {
-    setTasks(newArray);
-
-    if (updateOrderTimeout && updateOrderTimeout.current) {
-      clearTimeout(updateOrderTimeout.current);
-    }
-    updateOrderTimeout.current = setTimeout(() => {
-      updateTasksOrder(list.id, newArray);
-    }, 200);
-  };
-
-  const showingTypeOptions = [
-    {
-      value: "all",
-      name: "All",
-    },
-    {
-      value: "active",
-      name: "Active",
-    },
-    {
-      value: "completed",
-      name: "Completed",
-    },
-  ];
   const shownTasks =
     showingType === "completed"
       ? tasks.filter((t) => t.isFinished)
@@ -126,47 +99,13 @@ const TaskListCard = ({
     }
   };
 
-  const createNewTask = (e): void => {
-    e.preventDefault();
-    const inputValue = e.target.elements["new-task"].value;
-    const newArray = [...tasks];
-    const generatedId = cuid();
-    newArray.unshift({
-      body: inputValue,
-      isFinished: false,
-      priority: null,
-      id: generatedId,
-    });
-    setTasks(newArray);
-    createTaskHandler(e, list.id, generatedId);
-  };
-
-  const handleTaskChange = (e, taskId): void => {
-    if (updateTaskTimeout && updateTaskTimeout.current) {
-      clearTimeout(updateTaskTimeout.current);
-    }
-    updateTaskTimeout.current = setTimeout(() => {
-      updateHandler(e, taskId);
-    }, 400);
-  };
-
-  const handleTaskDelete = (taskId): void => {
-    const newArray = [...tasks];
-    newArray.splice(
-      newArray.findIndex((t) => t.id === taskId),
-      1
-    );
-    setTasks(newArray);
-    deleteHandler(taskId);
-  };
-
   const handleTaskListNameChange = (e) => {
     handleChange(e);
     setValue(e.target.value);
   };
 
   return (
-    <div className="w-full shadow-xl rounded-xl bg-white max-w-[240px] p-4 h-80">
+    <div className="w-full shadow-xl rounded-xl bg-white max-w-[240px] p-4 h-72">
       <div
         className={classNames(
           `flex flex-row items-center justify-start
@@ -208,23 +147,9 @@ const TaskListCard = ({
 
       <div className="mt-0 flex-grow flex flex-col min-h-0">
         <div className="flex-grow-1 flex flex-col min-h-0 overflow-x-hidden">
-          <div className="flex flex-col gap-2 overflow-x-hidden overflow-y-auto min-h-0 flex-grow">
-            {shownTasks.slice(0, 3).map((task) => (
-              <Task
-                noReorder={true}
-                isPreview={true}
-                task={task}
-                key={task.id}
-                handleFinishedCheck={(e) => updateIsFinishedHandler(e, task.id)}
-                handleChange={(e) => handleTaskChange(e, task.id)}
-                handleDelete={() => handleTaskDelete(task.id)}
-                handleListChange={(listId) =>
-                  updateTaskListHandler(task.id, listId)
-                }
-                defaultChecked={task.isFinished}
-                defaultValue={task.body}
-                otherTaskLists={otherTaskLists}
-              />
+          <div className="flex flex-col gap-6 overflow-x-hidden overflow-y-auto min-h-0 flex-grow">
+            {shownTasks.slice(0, 4).map((task) => (
+              <CardTask task={task} key={task.id} />
             ))}
           </div>
         </div>

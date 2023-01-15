@@ -23,10 +23,20 @@ const cardVariants = {
   },
 };
 
-const FlippingCard = ({ children, renderTodayList }) => {
+const FlippingCard = ({
+  children,
+  renderTodayList,
+  handleOnFlip,
+  handleOnFlipBack,
+}) => {
   const [selectedCard, setSelectedCard] = useState(null);
 
   const selectCard = (card) => {
+    if (selectedCard) {
+      handleOnFlipBack();
+    } else {
+      handleOnFlip();
+    }
     setSelectedCard(selectedCard ? null : card);
   };
   const handleCardMouseUp = (e, card) => {
@@ -36,11 +46,12 @@ const FlippingCard = ({ children, renderTodayList }) => {
   return (
     <div className="w-full h-full bg-gray-100 justify-center items-center">
       <div
-        className="max-w-full h-screen whitespace-nowrap overflow-hidden w-full
+        className="max-w-full h-full whitespace-nowrap overflow-hidden w-full
         perspective-default"
       >
         <motion.div
           className="relative inline-block w-full h-full bg-white margin-10 rounded-2xl"
+          style={{ height: "calc(100vh - 116px)" }}
           variants={cardVariants}
           animate={selectedCard === 1 ? "selected" : "notSelected"}
         >

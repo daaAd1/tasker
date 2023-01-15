@@ -74,7 +74,7 @@ const Task = ({
             <input
               name="is_finished"
               type="checkbox"
-              className="peer absolute checkbox checkbox-success rounded-sm peer checked:opacity-40"
+              className="peer absolute checkbox checkbox-success rounded-md peer checked:opacity-40"
               onChange={handleFinishedCheck}
               defaultChecked={defaultChecked}
             />

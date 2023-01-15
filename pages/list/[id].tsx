@@ -27,10 +27,13 @@ const ListPage = ({}) => {
     const data = await superagent.get(`/api/tasklist/load`).query({ listId });
     return data.body;
   });
-  const { data: allListsData } = useQuery(["taskLists"], async () => {
-    const data = await superagent.get("/api/tasklist/load");
-    return data.body;
-  });
+  const { data: allListsData, refetch: refetchAllLists } = useQuery(
+    ["taskLists"],
+    async () => {
+      const data = await superagent.get("/api/tasklist/load");
+      return data.body;
+    }
+  );
 
   const createTaskHandler = async (e, listId, generatedId: string) => {
     e.preventDefault();
@@ -103,11 +106,13 @@ const ListPage = ({}) => {
 
     router.push("/");
   };
-
+  console.log({ allListsData });
   return (
     <>
       <AppLayout>
         <FlippingCard
+          handleOnFlipBack={() => refetchAllLists()}
+          handleOnFlip={() => refetch()}
           renderTodayList={() => {
             return (
               <>
@@ -164,26 +169,28 @@ const ListPage = ({}) => {
           <h2 className="text-2xl font-semibold mb-6 px-6 pt-5">Your lists</h2>
           <div className="flex flex-row flex-wrap w-full px-6 py-4 gap-6">
             {allListsData &&
-              allListsData.map((list) => {
-                return (
-                  <TaskListCard
-                    defaultValue={list.name}
-                    handleChange={(e) => updateListHandler(list.id, e)}
-                    handleDelete={handleListDelete}
-                    list={list}
-                    createTaskHandler={createTaskHandler}
-                    updateIsFinishedHandler={updateIsFinishedHandler}
-                    updateHandler={updateHandler}
-                    deleteHandler={deleteHandler}
-                    updateTaskListHandler={updateTaskListHandler}
-                    otherTaskLists={
-                      allListsData &&
-                      allListsData.filter((d) => d.id !== list.id)
-                    }
-                    updateTasksOrder={updateTasksOrder}
-                  />
-                );
-              })}
+              allListsData
+                // .filter((l) => l.name !== "Today")
+                .map((list) => {
+                  return (
+                    <TaskListCard
+                      defaultValue={list.name}
+                      handleChange={(e) => updateListHandler(list.id, e)}
+                      handleDelete={handleListDelete}
+                      list={list}
+                      createTaskHandler={createTaskHandler}
+                      updateIsFinishedHandler={updateIsFinishedHandler}
+                      updateHandler={updateHandler}
+                      deleteHandler={deleteHandler}
+                      updateTaskListHandler={updateTaskListHandler}
+                      otherTaskLists={
+                        allListsData &&
+                        allListsData.filter((d) => d.id !== list.id)
+                      }
+                      updateTasksOrder={updateTasksOrder}
+                    />
+                  );
+                })}
           </div>
         </FlippingCard>
       </AppLayout>
